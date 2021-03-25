@@ -1,0 +1,56 @@
+A. MyBatis 라이브러리 WEB-INF/lib에 위치시킨다.
+
+B. mybatis-config.xml 파일생성(복사)[/src 디렉토리에(classpath root위치)]
+
+   B-1. db.properties파일생성[/src 디렉토리에(classpath root위치) ]
+   B-2. mybatis-config-mapper-interface.xml 파일에 jdbc.properties 파일설정 
+   		<properties resource="jdbc.properties"/>
+   B-3. mybatis-config-mapper-interface.xml 과 db.properties파일을 /src(classpath root위치) 디렉토리에 위치시킨다.
+
+C. com/itwill/user/mapper/ 디렉토리에 UserMapper.xml 파일 생성 
+
+D. com.itwill.user.mapper 패키지에 UserMapper.java 파일 생성 
+
+D. mybatis-config-mapper-interface.xml 파일에 mapper interface설정
+		D-1. com.itwill.user.mapper.UserMapper 인터페이스와 
+		    	동일한패키지(디렉토리)에있는(com/itwill/user/mapper/)
+		    	인터페이스이름과 동일한 이름의 
+		    	UserMapper.xml파일을 자동으로읽는다 
+		
+	 	<mappers>
+			<mapper class="com.itwill.user.mapper.UserMapper"/>
+		</mappers>
+E. UserMapper.xml 파일 에 sql문작성
+	
+	<select id="findUserList" resultType="com.itwill.user.User">
+		select userid,password,name,email from userinfo
+	</select>
+	
+F. UserMapper.java 파일 에 메쏘드작성
+	 F-1. 메쏘드이름은 	UserMapper.xml 파일의 id와일치
+	 F-2. 메쏘드인자타입은 UserMapper.xml 파일의 parameterType 와일치
+	 F-3. 메쏘드리턴타입은 UserMapper.xml 파일의 resultType 와일치
+	
+F. UserDaoImplMybatisMapperInterface작성
+	
+	메쏘드예>
+	
+	public List<User> findUserList() throws Exception {
+		SqlSession sqlSession = sqlSessionFactory.openSession(true);
+		UserMapper userMapper=sqlSession.getMapper(UserMapper.class);
+		List<User> userList=userMapper.findUserList();
+		sqlSession.close();
+		return userList;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
